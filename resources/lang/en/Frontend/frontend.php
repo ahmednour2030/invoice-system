@@ -59,5 +59,6 @@ return [
     'updated_failed'            => 'Updated Failed',
     'deleted_successfully'      => 'Deleted Successfully',
     'deleted_failed'            => 'Deleted Failed',
+    'sent_successfully'         => 'Email Sent Successfully',
 
 ];

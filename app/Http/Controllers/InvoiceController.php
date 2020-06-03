@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Invoice;
+use App\Mail\SendInvoice;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\In;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 use PDF;
 
 class InvoiceController extends Controller
@@ -223,12 +225,30 @@ class InvoiceController extends Controller
 
 
         $pdf = PDF::loadView('frontend.pdf', $data);
-        return $pdf->stream($invoice->invoice_number.'.pdf');
 
-        // return view('frontend.pdf', compact('invoice'));
+        if (Route::currentRouteName() == 'invoice.pdf') {
+            return $pdf->stream($invoice->invoice_number.'.pdf');
+        } else {
+            $pdf->save(public_path('assets/invoices/').$invoice->invoice_number.'.pdf');
+            return $invoice->invoice_number.'.pdf';
+        }
+
     }
 
+    public function send_to_email($id)
+    {
 
+        $invoice = Invoice::whereId($id)->first();
+        $this->pdf($id);
+
+        Mail::to($invoice->customer_email)->locale(config('app.locale'))->send(new SendInvoice($invoice));
+
+        return redirect()->route('invoice.index')->with([
+            'message' => __('Frontend/frontend.sent_successfully'),
+            'alert-type' => 'success'
+        ]);
+
+    }
 
 
 

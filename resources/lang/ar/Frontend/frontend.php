@@ -59,5 +59,6 @@ return [
     'updated_failed'            => 'تم فشل في عملية التعديل',
     'deleted_successfully'      => 'تم الحذف بنجاح',
     'deleted_failed'            => 'تم فشل في عملية الحذف',
+    'sent_successfully'         => 'تم الإرسال بنجاح',
 
 ];
